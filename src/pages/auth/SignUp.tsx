@@ -14,7 +14,7 @@ type Inputs = {
     confirm_password: string
 }
 
-export default function SignIn() {
+export default function SignUp() {
 
     const { register, handleSubmit, formState: { errors } } = useForm<Inputs>()
     const [loading, setLoading] = useState<boolean>(false)
@@ -24,9 +24,10 @@ export default function SignIn() {
         axios.post("/users", formData)
             .then((res) => {
                 console.log(res)
+                toast.success("Registro exitoso")
             })
             .catch((err) => {
-                toast.error(err.message)
+                toast.error(err.response.data.message)
             })
             .finally(() => setLoading(false))
     }
@@ -38,7 +39,7 @@ export default function SignIn() {
                 <div className="mb-2">
                     <div className="flex flex-col mb-4">
                         <Label>Nombre(s)</Label>
-                        <Input className="" type="text" {...register("name", { required: true })} />
+                        <Input className="" type="text"{...register("name", { required: true })} />
                     </div>
                     <div className="flex flex-col mb-4">
                         <Label>Apellido(s)</Label>
