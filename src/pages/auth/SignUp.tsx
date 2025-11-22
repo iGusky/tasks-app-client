@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"
-import { Label } from "@radix-ui/react-label";
-import { useForm } from "react-hook-form";
+import { FormInput} from "@/components/FormInput"
+import { Controller, useForm } from "react-hook-form";
 import axios from "@/lib/axios";
 import { useState } from "react";
 import { toast } from "sonner"
@@ -16,10 +15,12 @@ type Inputs = {
 
 export default function SignUp() {
 
-    const { register, handleSubmit, formState: { errors } } = useForm<Inputs>()
+    const { register, control, handleSubmit, formState: { errors } } = useForm<Inputs>()
     const [loading, setLoading] = useState<boolean>(false)
 
-    function handleSignIn(formData: Inputs) {
+    function handleSignUp(formData: Inputs) {
+        console.log(formData)
+        return
         setLoading(true)
         axios.post("/users", formData)
             .then((res) => {
@@ -34,14 +35,20 @@ export default function SignUp() {
 
     return (
         <div className="max-w-[600px] bg-white m-auto">
-            <form className="w-full p-6 rounded-md shadow" onSubmit={handleSubmit(handleSignIn)}>
+            <form className="w-full p-6 rounded-md shadow" onSubmit={handleSubmit(handleSignUp)}>
                 <h1 className="text-4xl font-black mb-4 tracking-tight text-balance">Registro</h1>
                 <div className="mb-2">
                     <div className="flex flex-col mb-4">
-                        <Label>Nombre(s)</Label>
-                        <Input className="" type="text"{...register("name", { required: true })} />
+                        <Controller
+                            name="name"
+                            control={control}
+                            rules={{required: true}}
+                            render={({field}) => <FormInput label="Nombre(s)" className="" type="text" value={field.value} onChange={field.onChange}/>} 
+                        >
+                        </Controller>
                     </div>
-                    <div className="flex flex-col mb-4">
+
+                    {/* <div className="flex flex-col mb-4">
                         <Label>Apellido(s)</Label>
                         <Input className="" type="text" {...register("lastname", { required: true })}
                             aria-invalid={errors.confirm_password ? "true" : "false"}
@@ -70,7 +77,7 @@ export default function SignUp() {
                             {...register("confirm_password", { required: true, min: 8 })}
                             aria-invalid={errors.confirm_password ? "true" : "false"}
                         />
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="flex flex-col gap-2 items-center justify-center">
