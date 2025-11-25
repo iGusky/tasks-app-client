@@ -4,9 +4,8 @@ const Home = () => {
   return (
     <div>
         <Paper>
-          <Text fw={"bold"}>Bienvenidos</Text>
-          <Text size='xs' c='dimmed'>Recientes</Text>
-          <Button>Enviar</Button>
+          <Text size='lg' fw={"bold"}>Bienvenido</Text>
+          <Text size='sm' c='dimmed'>Recientes</Text>
         </Paper>
     </div>
   )

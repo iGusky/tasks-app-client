@@ -50,7 +50,7 @@ const theme = createTheme({
   defaultRadius: "md",
   fontFamily: "Lato, Open sans, Arial",
   fontFamilyMonospace: "Space mono, Consolas",
-  scale: 0.8
+  scale: 1
 });
 
 export default theme
