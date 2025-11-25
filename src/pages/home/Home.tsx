@@ -1,5 +1,4 @@
-import { Paper, Text } from '@mantine/core'
-import React from 'react'
+import { Button, Paper, Text } from '@mantine/core'
 
 const Home = () => {
   return (
@@ -7,6 +6,7 @@ const Home = () => {
         <Paper>
           <Text fw={"bold"}>Bienvenidos</Text>
           <Text size='xs' c='dimmed'>Recientes</Text>
+          <Button>Enviar</Button>
         </Paper>
     </div>
   )
