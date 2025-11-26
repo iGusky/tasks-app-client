@@ -10,7 +10,7 @@ import theme from '@/styles/theme.ts'
 
 createRoot(document.getElementById('root')!).render(
   <MantineProvider theme={theme}>
-    <Toaster richColors position="top-center" />
+    <Toaster richColors position="bottom-right" />
     <AuthProvider>
       <Routes />
     </AuthProvider>
