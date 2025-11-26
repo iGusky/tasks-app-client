@@ -7,11 +7,11 @@ export const Navbar = () => {
     <div>
       <div>
         <Link to={"/"}>
-            <NavLink label={"Inicio"} leftSection={<Home size={16} strokeWidth={1.5}/>}></NavLink>
+            <NavLink active label={"Inicio"} leftSection={<Home size={16} strokeWidth={2}/>}></NavLink>
         </Link>
 
         <Link to={"/tasks"}>
-            <NavLink label={"Mis tareas"} leftSection={<Clipboard size={'16'} strokeWidth={'1.5'}/>}></NavLink>
+            <NavLink label={"Mis tareas"} leftSection={<Clipboard size={'16'} strokeWidth={'2'}/>}></NavLink>
         </Link>
       </div>
     </div>

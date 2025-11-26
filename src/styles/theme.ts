@@ -1,4 +1,4 @@
-import { createTheme } from "@mantine/core";
+import { createTheme, NavLink } from "@mantine/core";
 
 const theme = createTheme({
   colors: {
@@ -50,7 +50,18 @@ const theme = createTheme({
   defaultRadius: "md",
   fontFamily: "Lato, Open sans, Arial",
   fontFamilyMonospace: "Space mono, Consolas",
-  scale: 1
+  scale: 1,
+
+  components: {
+    NavLink: NavLink.extend({
+      classNames: {
+        body: "font-medium",
+      },
+    })
+    
+
+  }
+
 });
 
 export default theme

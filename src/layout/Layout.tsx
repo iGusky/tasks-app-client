@@ -1,22 +1,39 @@
-import { AppShell } from '@mantine/core'
+import { AppShell, Burger, Group } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks';
-import React, { type ReactNode } from 'react'
-import { Link } from 'react-router';
+import { useEffect, type ReactNode } from 'react'
 import { Navbar } from './Navbar';
+import { useLocation } from 'react-router';
 
 const Layout = ({ children }: { children: ReactNode }) => {
-    const [opened, { toggle }] = useDisclosure();
+    const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
+    const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
+
+    const location = useLocation()
+
+    useEffect(() => {
+        if(mobileOpened) toggleMobile()
+    }, [location])
+
     return (
         <AppShell
-            header={{ height: 40 }}
-            navbar={{ width: 200, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+            header={{ height: 60 }}
+            navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !mobileOpened, desktop: !desktopOpened }, }}
             padding="md"
         >
-            <AppShell.Header className='bg-red-500'>
-                Header!
+            <AppShell.Header>
+               <Group h="100%" px="md">
+                    <Burger onClick={toggleMobile} hiddenFrom="sm" size="sm"/>
+                    <Burger onClick={toggleDesktop} visibleFrom="sm" size="sm" />
+                    Gestiona tus tareas
+                </Group>
             </AppShell.Header>
-            <AppShell.Navbar className='bg-green-100'>
-                <Navbar />
+            <AppShell.Navbar>
+                <AppShell.Section grow>
+                    <Navbar />
+                </AppShell.Section>
+                <AppShell.Section>
+                    Nombre del usuario
+                </AppShell.Section>
             </AppShell.Navbar>
             <AppShell.Main>
                 {children}
