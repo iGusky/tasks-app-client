@@ -1,18 +1,28 @@
 import Layout from '@/layout/Layout';
 import { useAuth } from '@/providers/authProvider'
+import { Text } from '@mantine/core';
+import { useEffect } from 'react';
 
 import { Navigate, Outlet } from 'react-router';
 
 export const ProtectedRoutes = () => {
-    const {token} = useAuth();
+  const { checkAuth, isAuth } = useAuth();
 
-    if(!token){
-        return <Navigate to="/auth/login"/>
-    }
+  // const validateToken = async () => {
+  //   if (await checkAuth) {
+  //     return (
+  //       <Layout>
+  //         <Outlet />
+  //       </Layout>
+  //     )
+  //   }
+  //   return <Navigate to="/auth/login" />
+  // }
 
-  return (
-    <Layout>
-      <Outlet />
-    </Layout>
-  )
+  // useEffect(() => {
+  //   validateToken()
+  // }, [])
+
+  return <Text>{isAuth}</Text>
+
 }

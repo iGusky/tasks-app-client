@@ -8,7 +8,7 @@ import { ProtectedRoutes } from "./ProtectedRoutes"
 
 
 const Routes = () => {
-    const { token } = useAuth()
+    const { isAuth } = useAuth()
 
     const publicRoutes: RouteObject[] = []
 
@@ -46,7 +46,7 @@ const Routes = () => {
 
     const router = createBrowserRouter([
         ...publicRoutes,
-        ...(!token ? nonAuthRoutes : []),
+        ...(!isAuth ? nonAuthRoutes : []),
         ...privateRoutes
     ])
 

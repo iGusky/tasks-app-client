@@ -11,7 +11,7 @@ import { useAuth } from '@/providers/authProvider';
 export const Login = () => {
   const [loading, setLoading] = useState(false)
   let navigate = useNavigate();
-  const {setToken} = useAuth()
+  const {setIsAuth } = useAuth()
 
   const schema = z.object({
     email: z.email("Ingresa un email válido"),
@@ -31,10 +31,8 @@ export const Login = () => {
     try {
       setLoading(true)
       const response = await axios.post("/auth/login", values)
-    
       if(response.data && response.data.success) {
-        const token = response.data.data.token
-        setToken(token)
+        setIsAuth(true)
         return navigate("/")
       }
     } catch (e: any) {

@@ -9,32 +9,48 @@ import {
 } from "react";
 
 type AuthContextType = {
-  token: string | null,
-  setToken: (newToken: string) => void
+  isAuth: boolean,
+  setIsAuth: (newState: boolean) => void,
+  checkAuth: () => void
 }
 
-const AuthContext = createContext<AuthContextType>({token: "", setToken: () => {}});
+const AuthContext = createContext<AuthContextType>({isAuth: false, setIsAuth: () => {}, checkAuth: () => {}});
 
 const AuthProvider = ({children}: {children: ReactNode}) => {
-  const [token, setToken_] = useState(localStorage.getItem("token"))
+  const [isAuth, setIsAuth_] = useState(false)
 
-  const setToken = (newToken: string) => {
-    setToken_(newToken)
+  const setIsAuth = (newState: boolean) => {
+    setIsAuth_(newState)
   }
 
   useEffect(() => {
-    if(token){
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`
-      localStorage.setItem("token", token)
+    if(isAuth){
+      localStorage.setItem("loggedIn", isAuth.toString())
     } else {
-      delete axios.defaults.headers.common["Authorization"]
-      localStorage.removeItem("token")
+      localStorage.removeItem("loggedIn")
     }
-  }, [token])
+  }, [isAuth])
+
+  const checkAuth = async () => {
+    try {
+      const res = await axios.get("/auth/status", {
+        withCredentials: true
+      })
+      console.log(res.data.data)
+      setIsAuth(res.data.data)
+    } catch {
+      setIsAuth(false)
+    }
+  }
 
   const contextValue = useMemo(() => ({
-    token, setToken
-  }), [token])
+    isAuth, setIsAuth, checkAuth
+  }), [isAuth])
+
+  useEffect(() => {
+    console.log("disparando checkAuth")
+    checkAuth()
+  }, [])
 
   return (
     <AuthContext.Provider value={contextValue}>
