@@ -35,7 +35,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                     Nombre del usuario
                 </AppShell.Section>
             </AppShell.Navbar>
-            <AppShell.Main>
+            <AppShell.Main className='bg-neutral-50'>
                 {children}
             </AppShell.Main>
         </AppShell>

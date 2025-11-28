@@ -40,7 +40,7 @@ const theme = createTheme({
     ],
   },
 
-  white: "#FFFAFA",
+  white: "#FFF",
   black: "#1B1B1B",
   primaryColor: "dark",
 
