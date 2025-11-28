@@ -6,6 +6,7 @@ import Routes from "./routes/Index.tsx"
 
 import '@/styles/index.css'
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import theme from '@/styles/theme.ts'
 
 createRoot(document.getElementById('root')!).render(

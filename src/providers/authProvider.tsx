@@ -7,17 +7,21 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { redirect, useNavigate } from "react-router";
 
 type AuthContextType = {
   isAuth: boolean,
+  checkingAuth: boolean
   setIsAuth: (newState: boolean) => void,
   checkAuth: () => void
+  
 }
 
-const AuthContext = createContext<AuthContextType>({isAuth: false, setIsAuth: () => {}, checkAuth: () => {}});
+const AuthContext = createContext<AuthContextType>({isAuth: false, checkingAuth: true, setIsAuth: () => {}, checkAuth: () => {}});
 
 const AuthProvider = ({children}: {children: ReactNode}) => {
   const [isAuth, setIsAuth_] = useState(false)
+  const [checkingAuth, setCheckinAuth] = useState(true)
 
   const setIsAuth = (newState: boolean) => {
     setIsAuth_(newState)
@@ -32,19 +36,21 @@ const AuthProvider = ({children}: {children: ReactNode}) => {
   }, [isAuth])
 
   const checkAuth = async () => {
+    setCheckinAuth(true)
     try {
       const res = await axios.get("/auth/status", {
-        withCredentials: true
+       withCredentials: true
       })
-      console.log(res.data.data)
       setIsAuth(res.data.data)
     } catch {
       setIsAuth(false)
+    } finally {
+       setCheckinAuth(false)
     }
   }
 
   const contextValue = useMemo(() => ({
-    isAuth, setIsAuth, checkAuth
+    isAuth, setIsAuth, checkAuth, checkingAuth
   }), [isAuth])
 
   useEffect(() => {
