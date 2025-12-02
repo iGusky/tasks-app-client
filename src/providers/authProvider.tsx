@@ -1,4 +1,4 @@
-import axios from "@/lib/axios";
+import axios from '@/lib/axios'
 import {
   createContext,
   useContext,
@@ -6,20 +6,23 @@ import {
   useMemo,
   useState,
   type ReactNode,
-} from "react";
-import { redirect, useNavigate } from "react-router";
+} from 'react'
 
 type AuthContextType = {
-  isAuth: boolean,
+  isAuth: boolean
   checkingAuth: boolean
-  setIsAuth: (newState: boolean) => void,
+  setIsAuth: (newState: boolean) => void
   checkAuth: () => void
-  
 }
 
-const AuthContext = createContext<AuthContextType>({isAuth: false, checkingAuth: true, setIsAuth: () => {}, checkAuth: () => {}});
+const AuthContext = createContext<AuthContextType>({
+  isAuth: false,
+  checkingAuth: true,
+  setIsAuth: () => {},
+  checkAuth: () => {},
+})
 
-const AuthProvider = ({children}: {children: ReactNode}) => {
+const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuth, setIsAuth_] = useState(false)
   const [checkingAuth, setCheckinAuth] = useState(true)
 
@@ -28,40 +31,43 @@ const AuthProvider = ({children}: {children: ReactNode}) => {
   }
 
   useEffect(() => {
-    if(isAuth){
-      localStorage.setItem("loggedIn", isAuth.toString())
+    if (isAuth) {
+      localStorage.setItem('loggedIn', isAuth.toString())
     } else {
-      localStorage.removeItem("loggedIn")
+      localStorage.removeItem('loggedIn')
     }
   }, [isAuth])
 
   const checkAuth = async () => {
     setCheckinAuth(true)
     try {
-      const res = await axios.get("/auth/status", {
-       withCredentials: true
+      const res = await axios.get('/auth/status', {
+        withCredentials: true,
       })
       setIsAuth(res.data.data)
     } catch {
       setIsAuth(false)
     } finally {
-       setCheckinAuth(false)
+      setCheckinAuth(false)
     }
   }
 
-  const contextValue = useMemo(() => ({
-    isAuth, setIsAuth, checkAuth, checkingAuth
-  }), [isAuth])
+  const contextValue = useMemo(
+    () => ({
+      isAuth,
+      setIsAuth,
+      checkAuth,
+      checkingAuth,
+    }),
+    [isAuth, checkAuth]
+  )
 
   useEffect(() => {
-    console.log("disparando checkAuth")
     checkAuth()
   }, [])
 
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   )
 }
 

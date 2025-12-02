@@ -1,13 +1,14 @@
 import AuthProvider from '@/providers/authProvider.tsx'
 import { createRoot } from 'react-dom/client'
 import { Toaster } from 'sonner'
-import { MantineProvider } from "@mantine/core"
-import Routes from "./routes/Index.tsx"
+import { MantineProvider } from '@mantine/core'
+import Routes from './routes/Index.tsx'
 
 import '@/styles/index.css'
-import '@mantine/core/styles.css';
-import '@mantine/dates/styles.css';
+import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
 import theme from '@/styles/theme.ts'
+import '@/styles/task.css'
 
 createRoot(document.getElementById('root')!).render(
   <MantineProvider theme={theme}>
