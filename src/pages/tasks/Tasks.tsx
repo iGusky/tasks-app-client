@@ -7,6 +7,8 @@ import {
   Text,
   Menu,
   Checkbox,
+  LoadingOverlay,
+  Skeleton,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import axios from '@/lib/axios'
@@ -16,18 +18,20 @@ import { CircleCheckBig, EllipsisVertical, Pencil, Trash2 } from 'lucide-react'
 
 export const Tasks = () => {
   const [opened, { open, close }] = useDisclosure()
+  const [isLoading, setIsLoading] = useState(false)
 
   const [tasks, setTasks] = useState([])
   const handleGetTasks = async () => {
     try {
+      setIsLoading(true)
       const response = await axios.get('/tasks')
       if (response.data.success) {
-        console.log(response.data)
         setTasks(response.data.data.tasks)
       }
     } catch {
       toast.error('No se han podido actualizar las tareas')
     } finally {
+      setIsLoading(false)
     }
   }
 
@@ -35,13 +39,18 @@ export const Tasks = () => {
     handleGetTasks()
   }, [])
 
+  const handleOnClose = () => {
+    close()
+    handleGetTasks()
+  }
+
   const taskList = (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+    <div className="grid grid-cols-1 gap-2">
       {tasks
         .filter((t: { done: boolean }) => !t.done)
         .map((task: { title: string; description: string }) => {
           return (
-            <Card withBorder shadow="sm" padding="lg" radius="md">
+            <Card withBorder shadow="sm" padding="lg" radius="md" className='cursor-pointer'>
               <div className="flex items-center justify-between gap-6">
                 <Checkbox
                   radius={'xl'}
@@ -52,7 +61,6 @@ export const Tasks = () => {
                 <div className="grow">
                   <div className="flex justify-between">
                     <Text fw={'bold'}>{task.title}</Text>
-
                     <Menu>
                       <Menu.Target>
                         <ActionIcon variant="transparent" radius={'xl'}>
@@ -65,7 +73,6 @@ export const Tasks = () => {
                           Completar
                         </Menu.Item>
                         <Menu.Item leftSection={<Pencil size={12} />}>
-                          {' '}
                           Editar
                         </Menu.Item>
                         <Menu.Divider />
@@ -75,7 +82,7 @@ export const Tasks = () => {
                       </Menu.Dropdown>
                     </Menu>
                   </div>
-                  <Text size="sm" c={'dimmed'}>
+                  <Text size="sm" c={'dimmed'} className='overflow-scroll'>
                     {task.description}
                   </Text>
                 </div>
@@ -94,15 +101,28 @@ export const Tasks = () => {
         </Text>
         <Button onClick={open}>Nueva tarea</Button>
       </div>
-      {taskList ? (
+
+      {isLoading ? (
+        <TasksSkeleton />
+      ) : taskList ? (
         taskList
       ) : (
         <Text>Agrega una nueva tarea para verla aqui :D</Text>
       )}
 
       <Modal opened={opened} onClose={close} title={'Nueva tarea'}>
-        <NewTaskForm onClose={close} />
+        <NewTaskForm onClose={handleOnClose} />
       </Modal>
+    </div>
+  )
+}
+
+const TasksSkeleton = () => {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+      <Skeleton h={80} />
+      <Skeleton h={80} />
+      <Skeleton h={80} />
     </div>
   )
 }
