@@ -15,12 +15,13 @@ import axios from '@/lib/axios'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { CircleCheckBig, EllipsisVertical, Pencil, Trash2 } from 'lucide-react'
+import type { Task } from '@/types/Task'
 
 export const Tasks = () => {
   const [opened, { open, close }] = useDisclosure()
   const [isLoading, setIsLoading] = useState(false)
 
-  const [tasks, setTasks] = useState([])
+  const [tasks, setTasks] = useState<Task[]>([])
   const handleGetTasks = async () => {
     try {
       setIsLoading(true)
@@ -44,11 +45,24 @@ export const Tasks = () => {
     handleGetTasks()
   }
 
+  const handleMarkAsDone = async (taskId: string, checked: boolean) => {
+    if (!checked) return
+    if (!taskId) return
+    try {
+      const response = await axios.post('/tasks/done', { taskId })
+
+      if (response.data.success)
+        setTasks((all) => (all.filter((t: Task) => t._id !== taskId)))
+    } catch {
+      toast.error("No se ha podido completar la tarea, intenta más tarde.")
+    }
+  }
+
   const taskList = (
     <div className="grid grid-cols-1 gap-2">
       {tasks
-        .filter((t: { done: boolean }) => !t.done)
-        .map((task: { title: string; description: string }) => {
+        .filter((t: Task) => !t.done)
+        .map((task: Task) => {
           return (
             <Card withBorder shadow="sm" padding="lg" radius="md" className='cursor-pointer'>
               <div className="flex items-center justify-between gap-6">
@@ -57,6 +71,8 @@ export const Tasks = () => {
                   size="lg"
                   color="lime"
                   autoContrast={false}
+                  checked={task.done}
+                  onChange={(e) => handleMarkAsDone(task._id, e.target.checked)}
                 />
                 <div className="grow">
                   <div className="flex justify-between">
@@ -82,7 +98,7 @@ export const Tasks = () => {
                       </Menu.Dropdown>
                     </Menu>
                   </div>
-                  <Text size="sm" c={'dimmed'} className='overflow-scroll'>
+                  <Text size="sm" c={'dimmed'}>
                     {task.description}
                   </Text>
                 </div>

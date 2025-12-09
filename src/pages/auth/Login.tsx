@@ -2,7 +2,7 @@ import { Button, LoadingOverlay, PasswordInput, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { z } from 'zod'
-import { Link, redirect, useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import axios from '@/lib/axios'
@@ -36,8 +36,9 @@ export const Login = () => {
         return navigate('/')
       }
     } catch (e: any) {
+      console.error(e)
       toast.error(
-        e.response.data.message || 'Ocurrió un error al inciar sesión'
+        e.message || e.response.data.message || 'Ocurrió un error al inciar sesión'
       )
     } finally {
       setLoading(false)
