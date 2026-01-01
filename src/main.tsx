@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { Toaster } from 'sonner'
 import { MantineProvider } from '@mantine/core'
 import Routes from './routes/Index.tsx'
+// import "dotenv/config.js"
 
 import '@/styles/index.css'
 import '@mantine/core/styles.css'

@@ -3,6 +3,7 @@ import { useDisclosure } from '@mantine/hooks'
 import { useEffect, type ReactNode } from 'react'
 import { Navbar } from './Navbar'
 import { useLocation } from 'react-router'
+import { User } from './User'
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure()
@@ -35,7 +36,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <AppShell.Section grow>
           <Navbar />
         </AppShell.Section>
-        <AppShell.Section>Nombre del usuario</AppShell.Section>
+        <AppShell.Section>
+          <User/>
+        </AppShell.Section>
       </AppShell.Navbar>
       <AppShell.Main className="bg-neutral-50">{children}</AppShell.Main>
     </AppShell>

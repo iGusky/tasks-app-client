@@ -1,4 +1,4 @@
-import { Button, Paper, Text } from '@mantine/core'
+import { Paper, Text } from '@mantine/core'
 
 const Home = () => {
   return (

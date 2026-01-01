@@ -11,6 +11,7 @@ import {
 type AuthContextType = {
   isAuth: boolean
   checkingAuth: boolean
+  logOut: () => void
   setIsAuth: (newState: boolean) => void
   checkAuth: () => void
 }
@@ -18,6 +19,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType>({
   isAuth: false,
   checkingAuth: true,
+  logOut: () => {},
   setIsAuth: () => {},
   checkAuth: () => {},
 })
@@ -52,10 +54,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  const logOut = () => {
+    setIsAuth(false)
+  }
+
   const contextValue = useMemo(
     () => ({
       isAuth,
       setIsAuth,
+      logOut,
       checkAuth,
       checkingAuth,
     }),

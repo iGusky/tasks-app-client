@@ -7,7 +7,6 @@ import {
   Text,
   Menu,
   Checkbox,
-  LoadingOverlay,
   Skeleton,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
