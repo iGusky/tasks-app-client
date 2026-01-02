@@ -1,4 +1,10 @@
-import { Button, LoadingOverlay, PasswordInput, TextInput } from '@mantine/core'
+import {
+  Button,
+  Center,
+  LoadingOverlay,
+  PasswordInput,
+  TextInput,
+} from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { zodResolver } from 'mantine-form-zod-resolver'
 import { z } from 'zod'
@@ -38,7 +44,9 @@ export const Login = () => {
     } catch (e: any) {
       console.error(e)
       toast.error(
-        e.message || e.response.data.message || 'Ocurrió un error al inciar sesión'
+        e.message ||
+          e.response.data.message ||
+          'Ocurrió un error al inciar sesión'
       )
     } finally {
       setLoading(false)
@@ -46,18 +54,22 @@ export const Login = () => {
   }
 
   return (
-    <div className="max-w-[400px] m-auto p-2">
+    <div className="max-w-150 m-auto p-2">
       <form
-        className="flex flex-col gap-2 p-4 rounded border"
+        className="flex flex-col gap-2 p-6 rounded-md border "
         onSubmit={form.onSubmit((values) => handleLogin(values))}
       >
         <LoadingOverlay visible={loading} />
+        <p className="text-4xl font-black mb-4 tracking-tight text-balance">
+          Ingresar
+        </p>
         <TextInput
           label="Correo electrónico"
           type="email"
           {...form.getInputProps('email')}
         />
         <PasswordInput label="Contraseña" {...form.getInputProps('password')} />
+
         <Button type="submit">Iniciar sesión</Button>
         <Link to="/auth/signup" className="flex justify-center">
           <Button variant="transparent">
