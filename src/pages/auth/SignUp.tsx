@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form'
 import axios from '@/lib/axios'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { Button, Input, InputLabel } from '@mantine/core'
+import { Button, Input, InputLabel, LoadingOverlay } from '@mantine/core'
 import { Link } from 'react-router'
 
 type Inputs = {
@@ -40,6 +40,7 @@ export default function SignUp() {
         className="flex flex-col p-6 rounded-md border"
         onSubmit={handleSubmit(handleSignUp)}
       >
+        <LoadingOverlay visible={loading} />
         <p className="text-4xl font-black mb-2 tracking-tight text-balance">
           Registro
         </p>
