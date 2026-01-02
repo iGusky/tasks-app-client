@@ -1,8 +1,8 @@
 import { useAuth } from '@/providers/authProvider'
-import { Avatar, Group, Menu, Text, UnstyledButton } from '@mantine/core'
+import { Avatar, Group, LoadingOverlay, Menu, Text, UnstyledButton } from '@mantine/core'
 import axios from '@/lib/axios'
 import { ChevronRight, LogOut } from 'lucide-react'
-import { forwardRef } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 
 interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   image: string
@@ -11,14 +11,38 @@ interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   icon?: React.ReactNode
 }
 
+interface Profile {
+  fullname: string
+  enamil: string
+}
+
 export const User = () => {
 
   const { logOut } = useAuth()
+  const [profile, setProfile] = useState<Profile>({
+    fullname: '-',
+    enamil: '-'
+  });
+  const [fetchingProfile, setFetchingProfile] = useState<boolean>(false)
 
   const handleLogout = async () => {
     logOut()
     await axios.get("/auth/logout")
   }
+
+  const loadProfile = async () => {
+    try {
+      setFetchingProfile(true)
+      const response = await axios.get('/users/profile')
+      setProfile(response.data.data)
+    } finally {
+      setFetchingProfile(false)
+    }
+  }
+
+  useEffect(()=> {
+    loadProfile()
+  }, [])
   
 
   const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
@@ -35,7 +59,8 @@ export const User = () => {
         <Group>
           <Avatar src={image} radius="xl" />
 
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1 }} className='relative'>
+            <LoadingOverlay visible={fetchingProfile}/>
             <Text size="sm" fw={500}>
               {name}
             </Text>
@@ -54,8 +79,8 @@ export const User = () => {
     <Menu width={'200'} position="top-end">
       <Menu.Target>
         <UserButton
-          email="gustavohernandez.dev@gmail.com"
-          name="Gustavo Hernández"
+          email={profile?.email}
+          name={profile?.fullname}
           image="https://cdn.jsdelivr.net/gh/alohe/memojis/png/notion_8.png"
         />
       </Menu.Target>
