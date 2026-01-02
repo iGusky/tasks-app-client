@@ -13,7 +13,7 @@ interface UserButtonProps extends React.ComponentPropsWithoutRef<'button'> {
 
 interface Profile {
   fullname: string
-  enamil: string
+  email: string
 }
 
 export const User = () => {
@@ -21,7 +21,7 @@ export const User = () => {
   const { logOut } = useAuth()
   const [profile, setProfile] = useState<Profile>({
     fullname: '-',
-    enamil: '-'
+    email: '-'
   });
   const [fetchingProfile, setFetchingProfile] = useState<boolean>(false)
 
