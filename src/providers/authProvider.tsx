@@ -1,0 +1,85 @@
+import axios from '@/lib/axios'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
+
+type AuthContextType = {
+  isAuth: boolean
+  checkingAuth: boolean
+  logOut: () => void
+  setIsAuth: (newState: boolean) => void
+  checkAuth: () => void
+}
+
+const AuthContext = createContext<AuthContextType>({
+  isAuth: false,
+  checkingAuth: true,
+  logOut: () => {},
+  setIsAuth: () => {},
+  checkAuth: () => {},
+})
+
+const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [isAuth, setIsAuth_] = useState(false)
+  const [checkingAuth, setCheckinAuth] = useState(true)
+
+  const setIsAuth = (newState: boolean) => {
+    setIsAuth_(newState)
+  }
+
+  useEffect(() => {
+    if (isAuth) {
+      localStorage.setItem('loggedIn', isAuth.toString())
+    } else {
+      localStorage.removeItem('loggedIn')
+    }
+  }, [isAuth])
+
+  const checkAuth = async () => {
+    setCheckinAuth(true)
+    try {
+      const res = await axios.get('/auth/status', {
+        withCredentials: true,
+      })
+      setIsAuth(res.data.data)
+    } catch {
+      setIsAuth(false)
+    } finally {
+      setCheckinAuth(false)
+    }
+  }
+
+  const logOut = () => {
+    setIsAuth(false)
+  }
+
+  const contextValue = useMemo(
+    () => ({
+      isAuth,
+      setIsAuth,
+      logOut,
+      checkAuth,
+      checkingAuth,
+    }),
+    [isAuth, checkAuth]
+  )
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  return (
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+  )
+}
+
+export const useAuth = () => {
+  return useContext(AuthContext)
+}
+
+export default AuthProvider
